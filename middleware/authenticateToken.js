@@ -21,4 +21,4 @@ const checkId = (req, res, next) => {
   next();
 }
 
-module.export =  { authenticateToken, checkId } ;
+module.exports =  { authenticateToken, checkId } ;

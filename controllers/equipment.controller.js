@@ -1,33 +1,27 @@
-const Equipment = require('../models/model_equipment');
-const authenticateToken = require('../middleware/authenticateToken');
+const EquipmentService = require('../services/equipment.service');
 
-
-exports.get = function (req, authenticateToken , res) {
-    Equipment.find(function (err, equipment) {
-        if (err) return next(err);
-        res.send(equipment);
-    })
+exports.get = function (req, res) {
+    try {
+        res.send(EquipmentService.get());
+    } catch (error) {
+        console.log(`Error equipment.controller get ${error}`);
+    }
 };
 
-exports.create = function (req, authenticateToken, res) {
-    let equipment = new Equipment(
-        {
-            name: req.body.name,
-            status: req.body.status,
-            description: req.body.status,
-            userId: req.body.userId
+exports.create = function (req, res) {
+    try {
+        const rs = EquipmentService.create(req.body);
+        if (rs) {
+            res.send('Equipment Created successfully');
+        } else {
+            res.send(`Equipment Created error ${rs}`);
         }
-    );
-
-    equipment.save(function (err) {
-        if (err) {
-            return next(err);
-        }
-        res.send('Equipment Created successfully')
-    })
+    } catch (error) {
+        console.log(`Error equipment.controller create ${error}`);
+    }
 };
 
-exports.getByEquipmentId = function (req, { authenticateToken, checkId }, res) {
+exports.getByEquipmentId = function (req, res) {
     Equipment.findById(req.params.id, function (err, equipment) {
         if (err) return next(err);
         res.send(equipment);
