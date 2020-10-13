@@ -1,43 +1,44 @@
+const { deleted } = require('../services/equipment.service');
 const EquipmentService = require('../services/equipment.service');
 
-exports.get = function (req, res) {
+const get = async (req, res) => {
     try {
-        res.send(EquipmentService.get());
+        return res.status(200).send(await EquipmentService.get(req.body));
     } catch (error) {
-        console.log(`Error equipment.controller get ${error}`);
+        return res.status(400).send(error);
     }
 };
 
-exports.create = function (req, res) {
+const create = async (req, res) => {
     try {
-        const rs = EquipmentService.create(req.body);
-        if (rs) {
-            res.send('Equipment Created successfully');
-        } else {
-            res.send(`Equipment Created error ${rs}`);
-        }
+        return res.status(200).send(await EquipmentService.create(req.body));
     } catch (error) {
-        console.log(`Error equipment.controller create ${error}`);
+        return res.status(400).send(error);
     }
 };
 
-exports.getByEquipmentId = function (req, res) {
-    Equipment.findById(req.params.id, function (err, equipment) {
-        if (err) return next(err);
-        res.send(equipment);
-    })
+const getByEquipmentId = async (req, res) => {
+    try {
+        return res.status(200).send(await EquipmentService.getEquipmentById(req.body.id));
+    } catch (error) {
+        return res.status(400).send(error);
+    }
 };
 
-exports.update = function (req, res) {
-    Equipment.findByIdAndUpdate(req.params.id, {$set: req.body}, function (err, equipment) {
-        if (err) return next(err);
-        res.send('Equipment updated.');
-    });
+const update = async (req, res) => {
+    try {
+        return res.status(200).send(await EquipmentService.update(req.params.id, req.body));
+    } catch (error) {
+        return res.status(400).send(error);
+    }
 };
 
-exports.delete = function (req, res) {
-    Equipment.findByIdAndRemove(req.params.id, function (err) {
-        if (err) return next(err);
-        res.send('Deleted successfully!');
-    })
+const deleteEquipment = async (req, res) => {
+    try {
+        return res.status(200).send(await EquipmentService.deleteEquipment(req.params.id));
+    } catch (error) {
+        return res.status(400).send(error);
+    }
 };
+
+module.exports = {get, create, getByEquipmentId, update, deleteEquipment};

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const uuid = require('uuid');
 const Schema = mongoose.Schema;
 
 let user = new Schema(
@@ -14,7 +13,7 @@ let user = new Schema(
       type: String
     },
     isActive: {
-        type: Boolean
+      type: Boolean, default: true
     }
   },
   { collection: "Users" }

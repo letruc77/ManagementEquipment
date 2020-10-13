@@ -1,40 +1,66 @@
 const Equipment = require('../models/model_equipment');
 const connection = require('../database/connection');
+const mongoose = require("mongoose");
 
-exports.get = () => {
+const get = async (params) => {
     try {
         connection.connection();
-        Equipment.find(function (err, equipment) {
-            if (err) return next(err);
-            return equipment;
-        });
-        connection.disconnect();
+        if (params === {}) {
+            return await Equipment.find();
+        } else {
+            return await Equipment.find(params);
+        }
     } catch (error) {
-        console.log(`Error user.service get ${port}`);
         return error;
     }
 }
 
-exports.create = (equipment) => {
+const create = async (body) => {
     try {
         connection.connection();
-        let equipment = new Equipment(
+        const equipment = new Equipment(
             {
-                name: equipment.name,
-                status: equipment.status,
-                description: equipment.status,
-                userId: equipment.userId
+                name: body.name ? body.name : '',
+                status: body.owner && mongoose.isValidObjectId(body.owner) ? true : false,
+                description: body.description,
+                owner: body.owner && mongoose.isValidObjectId(body.owner) ? body.owner : null
             }
         );
-        equipment.save(function (err) {
-            if (err) {
-                return next(err);
-            }
-            return true;
-        })
-        connection.disconnect();
+        equipment.save();
+        return equipment;
     } catch (error) {
-        console.log(`Error user.service create ${port}`);
         return error;
     }
 }
+
+const getEquipmentById = async (id) => {
+    try {
+        connection.connection();
+        return await Equipment.findById(id);
+    } catch (error) {
+        return error;
+    }
+}
+
+const update = async (id, body) => {
+    try {
+        connection.connection();
+        if (body.owner && mongoose.isValidObjectId(body.owner)) {
+            body.status = true;
+        }
+        return await Equipment.findByIdAndUpdate(id, {$set: body});
+    } catch (error) {
+        return error;
+    }
+}
+
+const deleteEquipment = async (id) => {
+    try {
+        connection.connection();
+        return await Equipment.findByIdAndRemove(id);
+    } catch (error) {
+        return error;
+    }
+}
+
+module.exports = {get, create, getEquipmentById, update, deleteEquipment};

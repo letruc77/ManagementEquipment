@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const uuid = require('uuidv4');
-const UUID = require('uuid');
 const Schema = mongoose.Schema;
 
 let equipment = new Schema(
@@ -14,11 +12,11 @@ let equipment = new Schema(
     description: {
       type: String
     },
-    userId: {
-      type: UUID, default: uuid
+    owner: {
+      type: mongoose.ObjectId
     }
   },
-  { collection: "Equipments " }
+  { collection: "Equipments" }
 );
 
-module.exports = mongoose.model("Equipments ", equipment);
+module.exports = mongoose.model("Equipments", equipment);
