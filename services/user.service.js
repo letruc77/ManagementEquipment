@@ -51,8 +51,7 @@ const findOneUser = async (email) => {
 const getEquipmentByUserId = async (params) => {
     try {
       connection.connection();
-      console.log(params);
-      return Equipment.find({ userId: params.userId });
+      return Equipment.find({ owner: params });
     } catch (error) {
       return error;
     }

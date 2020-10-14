@@ -36,7 +36,7 @@ const create = async (req, res) => {
 
 const getEquipmentByUserId = async (req, res) => {
     try {
-      return res.status(200).send(await UserService.getEquipmentByUserId(req.params));
+      return res.status(200).send(await UserService.getEquipmentByUserId(req.params.userId));
     } catch (error) {
       return res.status(400).send(error);
     }

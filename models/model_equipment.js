@@ -7,7 +7,7 @@ let equipment = new Schema(
       type: String
     },
     status: {
-      type: Boolean
+      type: Boolean, default: false
     },
     description: {
       type: String

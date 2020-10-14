@@ -19,7 +19,7 @@ const create = async (req, res) => {
 
 const getByEquipmentId = async (req, res) => {
     try {
-        return res.status(200).send(await EquipmentService.getEquipmentById(req.body.id));
+        return res.status(200).send(await EquipmentService.getEquipmentById(req.params.id));
     } catch (error) {
         return res.status(400).send(error);
     }

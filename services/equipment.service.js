@@ -45,10 +45,15 @@ const getEquipmentById = async (id) => {
 const update = async (id, body) => {
     try {
         connection.connection();
-        if (body.owner && mongoose.isValidObjectId(body.owner)) {
-            body.status = true;
+        if (body.owner) {
+            if (mongoose.isValidObjectId(body.owner)) {
+                body.status = true;
+            } else {
+                body.status = false;
+            }
         }
-        return await Equipment.findByIdAndUpdate(id, {$set: body});
+        await Equipment.findOneAndUpdate(id, {$set: body});
+        return await getEquipmentById(id);
     } catch (error) {
         return error;
     }
@@ -57,7 +62,7 @@ const update = async (id, body) => {
 const deleteEquipment = async (id) => {
     try {
         connection.connection();
-        return await Equipment.findByIdAndRemove(id);
+        return await Equipment.findOneAndDelete(id);
     } catch (error) {
         return error;
     }
